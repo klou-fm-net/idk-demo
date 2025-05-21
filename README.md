@@ -12,6 +12,11 @@ directory.  To create the virtualenv it assumes that there is a `python3`
 package. If for any reason the automatic creation of the virtualenv fails,
 you can create the virtualenv manually.
 
+
+python -m venv my-venv
+my-venv/bin/pip install some-python-library
+
+
 To manually create a virtualenv on MacOS and Linux:
 
 ```

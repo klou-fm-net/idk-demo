@@ -3,11 +3,11 @@ import os
 
 import aws_cdk as cdk
 
-from cdk_kevinl.cdk_kevinl_stack import CdkKevinlStack
+from stacks.api_lambda_iam_ssm_dynamodn_eks_stack import KevinLDemoStack
 
 
 app = cdk.App()
-CdkKevinlStack(app, "CdkKevinlStack",
+KevinLDemoStack(app, "KevinLDemoStack",
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.
