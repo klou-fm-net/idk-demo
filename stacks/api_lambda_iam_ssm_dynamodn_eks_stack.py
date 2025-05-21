@@ -14,8 +14,8 @@ from resources.dynamodb_db import create_dynamodb_table
 class KevinLDemoStack(Stack): 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-        dynamodb_table = create_dynamodb_table(self)
-        lambda_function = create_lambda_function(self, dynamodb_table)
+       # dynamodb_table = create_dynamodb_table(self)
+       # lambda_function = create_lambda_function(self, dynamodb_table)
         # iam_role = create_iam_role(self)
 
 
