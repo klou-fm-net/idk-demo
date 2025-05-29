@@ -28,6 +28,7 @@ jobs:
           pip install -r requirements.txt
           npm install -g aws-cdk
           cdk --version
+          pip show aws-cdk-lib
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
