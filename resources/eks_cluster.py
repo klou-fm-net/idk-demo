@@ -9,5 +9,6 @@ def create_eks_ckuser_and_service(scope, vpc):
         version=eks.KubernetesVersion.V1_27,
         vpc=vpc,
         default_capacity=1,
-        default_capacity_instance=ec2.InstanceType("t2.micro")
+        default_capacity_instance=ec2.InstanceType("t2.micro"),
+        kubectl_layer = eks.KubectlLayer(self, "KubectlLayer")
     )
