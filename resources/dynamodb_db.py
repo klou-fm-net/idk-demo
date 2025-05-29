@@ -1,19 +1,20 @@
 from aws_cdk import (
-    aws_dynamodb as db,
+    aws_dynamodb as dynamodb,
     aws_ssm as ssm
 )
 
 def create_dynamodb_table(scope) :
-    db_table = db.Table(
+    ddb_table = dynamodb.Table(
         scope, 
         "DemoTable",
-        partition_key = db.Attribute(name = "bookName", type = db.AttributeType.STRING),
-        billing_mode = db.BillingMode.PAY_PER_REQUEST,
+        partition_key = dynamodb.Attribute(name = "bookName", type = dynamodb.AttributeType.STRING),
+        billing_mode = dynamodb.BillingMode.PAY_PER_REQUEST,
     )
 
-    ssm.StringParameter(scope, "DynamoTableNameParam",
-        parameter_name="/config/dynamoTableName",
-        string_value=db_table.table_name
+    ssmParameter = ssm.StringParameter(scope, "DynamoTableNameParam",
+        parameter_name = "/config/dynamoTableName",
+        string_value = ddb_table.table_name
     )
 
-    return db_table
+
+    return ddb_table

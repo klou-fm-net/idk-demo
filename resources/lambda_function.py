@@ -1,5 +1,4 @@
 from aws_cdk import (
-    Duration,
     aws_iam as iam,
     aws_lambda as lambdafunc
 )

@@ -11,19 +11,6 @@ def get_table():
     table_name = param['Parameter']['Value']
     return dynamodb.Table(table_name)
 
-def main(event, context):
-    method = event.get('httpMethod')
-    
-    if method == 'GET':
-        return handle_get(event)
-    elif method == 'POST':
-        return handle_post(event)
-    else:
-        return {
-            'statusCode': 405,
-            'body': json.dumps({'error': 'Method not allowed'})
-        }
-
 def handle_get(event):
     table = get_table()
     item_id = event['queryStringParameters'].get('id')
@@ -60,3 +47,16 @@ def handle_post(event):
         'statusCode': 200,
         'body': json.dumps({'message': 'Data stored successfully', 'data': eks_data})
     }
+
+def main(event, context):
+    method = event.get('httpMethod')
+    
+    if method == 'GET':
+        return handle_get(event)
+    elif method == 'POST':
+        return handle_post(event)
+    else:
+        return {
+            'statusCode': 405,
+            'body': json.dumps({'error': 'Method not allowed'})
+        }
