@@ -20,9 +20,9 @@ class KevinLDemoStack(Stack):
        # dynamodb_table = create_dynamodb_table(self)
        # lambda_function = create_lambda_function(self, dynamodb_table)
         # iam_role = create_iam_role(self)
-        vpc = ec2.aws_ec2.CfnVPC(self, "eks_vpc")
+        vpc = ec2.CfnVPC(self, "eks_vpc")
         eks_cluster = create_eks_ckuser_and_service (self, vpc)
-        
+
 
 
 
