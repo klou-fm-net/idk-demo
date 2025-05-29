@@ -5,11 +5,11 @@ from aws_cdk import (
 # from aws_cdk.lambda_layer_kubectl import KubectlLayer
 
 def create_eks_ckuser_and_service(scope, vpc): 
-    eks.Cluster(scope, "DemoAppEKS",
-        version=eks.KubernetesVersion.V1_27,
-        vpc=vpc,
-        default_capacity=1,
-        default_capacity_instance=ec2.InstanceType("t2.micro"),
-        # kubectl_layer=KubectlLayer(scope, "kubectl")
-        kubectl_layer = null
-    )
+        cluster = eks.Cluster(
+            scope, "MyEksCluster",
+            version=eks.KubernetesVersion.V1_27,
+            vpc=vpc,
+            default_capacity=1,
+            default_capacity_instance=ec2.InstanceType("t2.micro")
+            # No kubectl_layer here
+        )
