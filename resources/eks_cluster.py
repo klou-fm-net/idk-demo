@@ -6,7 +6,6 @@ from aws_cdk import (
 def create_eks_ckuser_and_service(scope, vpc): 
     
     eks.Cluster(scope, "DemoAppEKS",
-        scope, "MyEksCluster",
         version=eks.KubernetesVersion.V1_27,
         vpc=vpc,
         default_capacity=1,
