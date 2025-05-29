@@ -27,6 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           npm install -g aws-cdk@2.0
+          pip install aws-cdk.lambda-layer-kubectl-v27
           cdk --version
           pip show aws-cdk-lib
       - name: Configure AWS credentials
@@ -37,7 +38,9 @@ jobs:
           aws-region: "us-east-2"
       - name: CDK DIFF
         run: cdk diff
-      - name: Deploy to AWS
-        run: cdk deploy --app="python3 ${PWD}/app.py" --require-approval=never
+      - name: CDK SYNTH
+        run: cdk synth
+      # - name: Deploy to AWS
+      #   run: cdk deploy --app="python3 ${PWD}/app.py" --require-approval=never
  #     - name: Destroy stack
  #       run: cdk destroy --app="python3 ${PWD}/cdk/my_service/app.py" --force
