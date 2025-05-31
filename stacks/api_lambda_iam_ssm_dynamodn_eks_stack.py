@@ -25,7 +25,7 @@ class KevinLDemoStack(Stack):
         
         eks_cluster = create_eks_ckuser (self, vpc)
         api = apigateway.RestApi(self, "ApiGatewayWithLambda",
-                                 deploy_options=apigw.StageOptions(stage_name="prod") )
+                                 deploy_options=apigateway.StageOptions(stage_name="prod") )
         items = api.root.add_resource("names")
         items.add_method("GET", apigateway.LambdaIntegration(lambda_function))
         items.add_method("POST", apigateway.LambdaIntegration(lambda_function))
