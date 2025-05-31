@@ -15,17 +15,18 @@ def get_table():
 def handle_get(event):
     table = get_table()
     name = event['queryStringParameters'].get('name')
-    response = table.get_item(Key={'Item': name})
+    response = table.get_item(Key={'Name': name})
+    item = response.get('Item')
     
-    if 'Name' in response:
+    if item:
         return {
             'statusCode': 200,
-            'body': json.dumps(response['Name'])
+            'body': json.dumps(item)
         }
     else:
         return {
             'statusCode': 404,
-            'body': json.dumps({'error': 'Name not found'})
+            'body': json.dumps({'error': "Name " + name + " not found"})
         }
 
 def handle_post(event):
