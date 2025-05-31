@@ -3,8 +3,6 @@ name: AWS CDK Deployment Pipeline
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   build:
@@ -69,9 +67,5 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "us-east-2"
-      - name: CDK DIFF
-        run: cdk diff
-      - name: CDK SYNTH
-        run: cdk synth
       - name: Deploy to AWS
         run: cdk deploy --app="python3 ${PWD}/app.py" --require-approval=never
