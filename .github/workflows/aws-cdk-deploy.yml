@@ -40,7 +40,7 @@ jobs:
         run: cdk diff
       - name: CDK SYNTH
         run: cdk synth
-      # - name: Deploy to AWS
-      #   run: cdk deploy --app="python3 ${PWD}/app.py" --require-approval=never
+      - name: Deploy to AWS
+        run: cdk deploy --app="python3 ${PWD}/app.py" --require-approval=never
  #     - name: Destroy stack
  #       run: cdk destroy --app="python3 ${PWD}/cdk/my_service/app.py" --force

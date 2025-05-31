@@ -7,12 +7,12 @@ def create_dynamodb_table(scope) :
     ddb_table = dynamodb.Table(
         scope, 
         "DemoTable",
-        partition_key = dynamodb.Attribute(name = "bookName", type = dynamodb.AttributeType.STRING),
+        partition_key = dynamodb.Attribute(name = "Name", type = dynamodb.AttributeType.STRING),
         billing_mode = dynamodb.BillingMode.PAY_PER_REQUEST,
     )
 
-    ssmParameter = ssm.StringParameter(scope, "DynamoTableNameParam",
-        parameter_name = "/config/dynamoTableName",
+    ssm.StringParameter(scope, "DynamoTableNameParam",
+        parameter_name = "/config/cdk_demo/dynamodb/table_name",
         string_value = ddb_table.table_name
     )
 

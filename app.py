@@ -7,7 +7,7 @@ from stacks.api_lambda_iam_ssm_dynamodn_eks_stack import KevinLDemoStack
 
 
 app = cdk.App()
-KevinLDemoStack(app, "KevinLDemoStack",
+KevinLDemoStack(app, "DemoAppStack-20250530",
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.

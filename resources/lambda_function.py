@@ -21,9 +21,7 @@ def create_lambda_function(scope, dynamodb_table) :
         actions=["ssm:GetParameter"],
         resources=[f"arn:aws:ssm:{scope.region}:{scope.account}:parameter/config/*"]
     ))
-
-
-
+    
     return lambdafunc.Function(
         scope, 
         "lambdaId",

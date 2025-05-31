@@ -1,52 +1,74 @@
 import json
 import boto3
 import os
+import urllib.request
 
 # Get table name from SSM Parameter Store
 ssm = boto3.client('ssm')
 dynamodb = boto3.resource('dynamodb')
 
 def get_table():
-    param = ssm.get_parameter(Name='/config/dynamoTableName')
+    param = ssm.get_parameter(Name='/config/cdk_demo/dynamodb/table_name')
     table_name = param['Parameter']['Value']
     return dynamodb.Table(table_name)
 
 def handle_get(event):
     table = get_table()
-    item_id = event['queryStringParameters'].get('id')
-    response = table.get_item(Key={'id': item_id})
+    name = event['queryStringParameters'].get('name')
+    response = table.get_item(Key={'Item': name})
     
-    if 'Item' in response:
+    if 'Name' in response:
         return {
             'statusCode': 200,
-            'body': json.dumps(response['Item'])
+            'body': json.dumps(response['Name'])
         }
     else:
         return {
             'statusCode': 404,
-            'body': json.dumps({'error': 'Item not found'})
+            'body': json.dumps({'error': 'Name not found'})
         }
 
 def handle_post(event):
-    import requests  # Make sure `requests` is included in deployment package if needed
     table = get_table()
     
-    body = json.loads(event['body'])
-    eks_url = os.environ.get('EKS_MICROSERVICE_URL')  # Set this via Lambda environment variable
+    try:
+        # Parse request body
+        data = event.get("body", "{}")
+        name = json.loads(data).get("name", None)
 
-    # Forward to EKS microservice
-    eks_response = requests.post(eks_url, json=body)
-    eks_data = eks_response.json()
+        print(event)
 
-    # Save to DynamoDB
-    item_id = eks_data.get('id') or body.get('id') or 'generated-id'
-    item = {'id': item_id, 'data': eks_data}
-    table.put_item(Item=item)
+        # Read EKS service endpoint from environment variable
+        eks_url = os.environ.get("EKS_MICROSERVICE_URL")
+        if not eks_url:
+            return {
+                "statusCode": 500,
+                "body": json.dumps({"error": "EKS_MICROSERVICE_URL not configured"})
+            }
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps({'message': 'Data stored successfully', 'data': eks_data})
-    }
+        # Prepare request
+        headers = {"Content-Type": "application/json"}
+        req = urllib.request.Request(eks_url + "/review", data=data.encode('utf-8'), headers=headers, method='POST')
+
+        # Send request
+        with urllib.request.urlopen(req) as response:
+            response_body = response.read().decode('utf-8')
+            response_data = json.loads(response_body) 
+            item = {
+                'Name': name,
+                'review': response_data["review"],
+            }
+            db_response = table.put_item(Item = item)            
+            return {
+                "statusCode": response.getcode(),
+                "body": json.dumps(response_data)
+            }
+        
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": str(e)})
+        }
 
 def main(event, context):
     method = event.get('httpMethod')
