@@ -8,6 +8,7 @@ from aws_cdk import (
     aws_ec2 as ec2   
 )
 
+
 from constructs import Construct
 from resources.lambda_function import create_lambda_function
 from resources.dynamodb_db import create_dynamodb_table
@@ -24,10 +25,14 @@ class KevinLDemoStack(Stack):
         vpc = ec2.Vpc(self, "EksVpc", max_azs=2)
         
         eks_cluster = create_eks_ckuser (self, vpc)
-        api = apigateway.RestApi(self, "ApiGatewayWithLambda",
-                                 deploy_options=apigateway.StageOptions(stage_name="prod") )
+        api = apigateway.RestApi(self, "ApiGatewayWithLambda")
         items = api.root.add_resource("names")
         items.add_method("GET", apigateway.LambdaIntegration(lambda_function))
         items.add_method("POST", apigateway.LambdaIntegration(lambda_function))
-        api.deploy
+        api_deployment = apigateway.Deployment(self, "Deployment", api = api)
+        # Stage named 'prod'
+        apigateway.Stage(self, "ProdStage",
+            deployment = api_deployment,
+            stage_name="prod"
+        )
 
